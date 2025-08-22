@@ -196,20 +196,60 @@ function downloadJSON() {
         </section>
 
         {/* Animals JSON */}
-        <section className="bg-white rounded-2xl shadow-sm border p-4">
-          <h2 className="text-lg font-semibold mb-2">Animals (JSON)</h2>
-          <TextArea value={animalsText} onChange={setAnimalsText} rows={20}/>
-        </section>
+      <section className="lg:col-span-1 bg-white rounded-2xl shadow-sm border p-4">
+  <div className="flex items-center justify-between mb-2">
+    <h2 className="text-lg font-semibold">Animals</h2>
+    <div className="flex items-center gap-2">
+      <label className="text-sm px-3 py-1.5 rounded-xl border cursor-pointer hover:bg-slate-50">
+        Import JSON
+        <input type="file" accept="application/json" className="hidden" onChange={importFile} />
+      </label>
+      <button className="text-sm px-3 py-1.5 rounded-xl border hover:bg-slate-50" onClick={downloadJSON}>
+        Download
+      </button>
+      <button className="text-sm px-3 py-1.5 rounded-xl border hover:bg-slate-50" onClick={() => setShowJson(s => !s)}>
+        {showJson ? "Hide JSON" : "Edit JSON"}
+      </button>
+    </div>
+  </div>
 
-        {/* Matches */}
-        <section className="bg-white rounded-2xl shadow-sm border p-4">
-          <h2 className="text-lg font-semibold mb-2">Matches</h2>
-          <div className="space-y-3">
-            {top.map(({animal, score, reasons}) => (
-              <MatchCard key={animal.id} animal={animal} score={score} reasons={reasons}/>
-            ))}
+  {showJson ? (
+    <>
+      <p className="text-sm text-slate-600 mb-3">Paste or edit an array of animals.</p>
+      <TextArea value={animalsText} onChange={setAnimalsText} rows={20} />
+    </>
+  ) : (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {animals.map(a => (
+        <div key={a.id} className="border rounded-2xl p-3 flex gap-3">
+          {a.image ? (
+            <img src={a.image} alt={a.name} className="h-14 w-14 rounded-lg object-cover" />
+          ) : (
+            <div className="h-14 w-14 rounded-lg bg-slate-200 grid place-items-center text-xs text-slate-600">
+              {a.species}
+            </div>
+          )}
+          <div className="flex-1">
+            <div className="font-medium">{a.name}</div>
+            <div className="text-xs text-slate-600 capitalize">
+              {a.species} • {a.breed || "Unknown"} • {a.size || "size?"}
+            </div>
+            <div className="mt-1 flex flex-wrap gap-1 text-[11px] text-slate-700">
+              {a.energy && <span className="px-2 py-0.5 rounded-full bg-slate-100">Energy: {a.energy}</span>}
+              {a.goodWithKids === true && <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Kid friendly</span>}
+              {a.goodWithDogs === true && <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Dog friendly</span>}
+              {a.goodWithCats === true && <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Cat friendly</span>}
+            </div>
           </div>
-        </section>
+        </div>
+      ))}
+      {animals.length === 0 && (
+        <div className="text-sm text-slate-500">No animals loaded (use Import JSON or Edit JSON).</div>
+      )}
+    </div>
+  )}
+</section>
+
       </main>
     </div>
   );

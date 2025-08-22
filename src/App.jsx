@@ -28,60 +28,26 @@ function SDCHPetMatchPrototype() {
 
   // ------- SAMPLE ANIMALS -------
   const [animalsText, setAnimalsText] = useState(() =>
-    JSON.stringify(
-      [
-        {
-          id: "D-101",
-          name: "Milo",
-          species: "dog",
-          breed: "Kelpie mix",
-          size: "medium",
-          energy: "high",
-          exerciseNeedsHrsPerDay: 2,
-          needsYard: true,
-          fenceMinHeightCm: 150,
-          goodWithKids: true,
-          goodWithDogs: true,
-          goodWithCats: false,
-          shedLevel: "moderate",
-          vocalLevel: "moderate",
-          timeAloneToleranceHrs: 4,
-          image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1200&auto=format&fit=crop"
-        },
-        {
-          id: "D-203",
-          name: "Bear",
-          species: "dog",
-          breed: "Greyhound",
-          size: "large",
-          energy: "low",
-          exerciseNeedsHrsPerDay: 0.75,
-          needsYard: false,
-          fenceMinHeightCm: 120,
-          goodWithKids: true,
-          goodWithDogs: true,
-          goodWithCats: false,
-          shedLevel: "low",
-          vocalLevel: "low",
-          timeAloneToleranceHrs: 6,
-          image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=1200&auto=format&fit=crop"
-        },
-        {
-          id: "C-317",
-          name: "Maisie",
-          species: "cat",
-          breed: "Domestic Shorthair",
-          size: "small",
-          energy: "moderate",
-          needsYard: false,
-          fenceMinHeightCm: 0,
-          goodWithKids: true,
-          goodWithDogs: false,
-          goodWithCats: true,
-          shedLevel: "low",
-          vocalLevel: "moderate",
-          timeAloneToleranceHrs: 10,
-          image: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=1200&auto=format&fit=crop"
+   const [showJson, setShowJson] = useState(false);
+
+function importFile(e) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => setAnimalsText(String(reader.result || ""));
+  reader.readAsText(file);
+}
+
+function downloadJSON() {
+  const blob = new Blob([animalsText], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "animals.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+=80&w=1200&auto=format&fit=crop"
         }
       ],
       null,

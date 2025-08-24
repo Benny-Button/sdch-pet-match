@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from "react";
 
-// --- Sample animals (kept simple) ---
+/** ----------------------------------------------------------------
+ *  Sample animals (dogs + cats)
+ *  Keep attributes aligned to the profile + scoring rules below.
+ *  ---------------------------------------------------------------- */
 const animals = [
   {
     id: "D-101",
@@ -9,9 +12,13 @@ const animals = [
     breed: "Kelpie mix",
     size: "medium",
     energy: "high",
+    needsYard: true,
+    fenceMinHeightCm: 150,
+    timeAloneToleranceHrs: 4,
     goodWithKids: true,
     goodWithDogs: true,
     goodWithCats: false,
+    costEstimateAUD: 180,
     image:
       "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1200&auto=format&fit=crop",
   },
@@ -22,11 +29,66 @@ const animals = [
     breed: "Greyhound",
     size: "large",
     energy: "low",
+    needsYard: false,
+    fenceMinHeightCm: 0,
+    timeAloneToleranceHrs: 6,
     goodWithKids: true,
     goodWithDogs: true,
     goodWithCats: false,
+    costEstimateAUD: 160,
     image:
       "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    id: "D-244",
+    name: "Archie",
+    species: "dog",
+    breed: "Cavoodle",
+    size: "small",
+    energy: "moderate",
+    needsYard: false,
+    fenceMinHeightCm: 0,
+    timeAloneToleranceHrs: 5,
+    goodWithKids: true,
+    goodWithDogs: true,
+    goodWithCats: true,
+    costEstimateAUD: 200,
+    image:
+      "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    id: "D-318",
+    name: "Daisy",
+    species: "dog",
+    breed: "Labrador",
+    size: "large",
+    energy: "high",
+    needsYard: true,
+    fenceMinHeightCm: 150,
+    timeAloneToleranceHrs: 3,
+    goodWithKids: true,
+    goodWithDogs: true,
+    goodWithCats: false,
+    costEstimateAUD: 220,
+    image:
+      "https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    id: "D-351",
+    name: "Rusty",
+    species: "dog",
+    breed: "Cattle Dog",
+    size: "medium",
+    energy: "high",
+    needsYard: true,
+    fenceMinHeightCm: 180,
+    timeAloneToleranceHrs: 4,
+    goodWithKids: true,
+    goodWithDogs: true,
+    goodWithCats: false,
+    costEstimateAUD: 190,
+    image:
+      "https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=1200&auto=format&fit=crop",
   },
   {
     id: "C-317",
@@ -35,43 +97,82 @@ const animals = [
     breed: "Domestic Shorthair",
     size: "small",
     energy: "moderate",
+    needsYard: false,
+    fenceMinHeightCm: 0,
+    timeAloneToleranceHrs: 8,
     goodWithKids: true,
     goodWithDogs: false,
     goodWithCats: true,
+    costEstimateAUD: 120,
     image:
       "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=1200&auto=format&fit=crop",
   },
+  {
+    id: "C-222",
+    name: "Luna",
+    species: "cat",
+    breed: "Ragdoll",
+    size: "small",
+    energy: "low",
+    needsYard: false,
+    fenceMinHeightCm: 0,
+    timeAloneToleranceHrs: 6,
+    goodWithKids: true,
+    goodWithDogs: true,
+    goodWithCats: true,
+    costEstimateAUD: 140,
+    image:
+      "https://images.unsplash.com/photo-1543852786-1cf6624b9987?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    id: "C-289",
+    name: "Pepper",
+    species: "cat",
+    breed: "Bengal",
+    size: "small",
+    energy: "high",
+    needsYard: false,
+    fenceMinHeightCm: 0,
+    timeAloneToleranceHrs: 4,
+    goodWithKids: false,
+    goodWithDogs: false,
+    goodWithCats: true,
+    costEstimateAUD: 150,
+    image:
+      "https://images.unsplash.com/photo-1596854307943-279e29c90b68?q=80&w=1200&auto=format&fit=crop",
+  },
 ];
 
-// --- Simple helpers ---
+/** ----------------------- Scoring helpers ----------------------- */
 const map3 = { low: 1, moderate: 2, high: 3 };
-function scoreBadge(score) {
-  if (score >= 25) return { label: "Excellent", bg: "#dcfce7", color: "#166534" };
-  if (score >= 10) return { label: "Good", bg: "#e0f2fe", color: "#075985" };
+const sizeMap = { small: 1, medium: 2, large: 3 };
+
+function badgeFor(score) {
+  if (score >= 30) return { label: "Excellent", bg: "#dcfce7", color: "#166534" };
+  if (score >= 15) return { label: "Good", bg: "#e0f2fe", color: "#075985" };
   if (score >= 0) return { label: "Fair", bg: "#fef3c7", color: "#92400e" };
   return { label: "Unsuitable", bg: "#fee2e2", color: "#991b1b" };
 }
 
-// --- Match scoring (intentionally simple & explainable) ---
-function scoreMatch(animal, profile) {
+function scoreMatch(a, p) {
   let score = 0;
   const reasons = [];
 
   // Species preference
-  if (profile.prefers !== "either" && animal.species !== profile.prefers) {
+  if (p.prefers !== "either" && a.species !== p.prefers) {
     score -= 20;
-    reasons.push(`Prefers ${profile.prefers}, but this is a ${animal.species}.`);
+    reasons.push(`Prefers ${p.prefers}, but this is a ${a.species}.`);
   } else {
     score += 5;
     reasons.push("Species preference aligns or is flexible.");
   }
 
-  // Energy vs activity
-  const owner = map3[profile.activity] ?? 2;
-  const pet = map3[animal.energy] ?? 2;
+  // Energy vs owner activity
+  const owner = map3[p.activity] ?? 2;
+  const pet = map3[a.energy] ?? 2;
   if (owner < pet) {
     score -= 12;
-    reasons.push(`Pet energy is ${animal.energy}; profile activity is ${profile.activity}.`);
+    reasons.push(`Pet energy ${a.energy}; profile activity ${p.activity}.`);
   } else if (owner === pet) {
     score += 10;
     reasons.push("Energy levels are well matched.");
@@ -81,8 +182,8 @@ function scoreMatch(animal, profile) {
   }
 
   // Children compatibility
-  if (profile.children > 0) {
-    if (animal.goodWithKids) {
+  if (p.children > 0) {
+    if (a.goodWithKids) {
       score += 8;
       reasons.push("Good with children.");
     } else {
@@ -91,21 +192,95 @@ function scoreMatch(animal, profile) {
     }
   }
 
+  // Dwelling suitability
+  if (p.dwelling === "apartment") {
+    if (a.species === "cat") {
+      score += 6;
+      reasons.push("Apartment-suitable: cat.");
+    } else if (sizeMap[a.size] >= 3 || a.energy === "high") {
+      score -= 10;
+      reasons.push("Big/high-energy dog in apartment may be unsuitable.");
+    } else {
+      score += 4;
+      reasons.push("Dog is small/medium or moderate energy — OK for apartment.");
+    }
+  } else {
+    score += 2;
+    reasons.push("House/townhouse gives more space.");
+  }
+
+  // Yard needs
+  if (a.needsYard) {
+    if (!p.hasYard) {
+      score -= 25;
+      reasons.push("Pet requires a yard; profile has none.");
+    } else {
+      score += 6;
+      reasons.push("Yard available.");
+      if (a.fenceMinHeightCm > 0 && (p.fenceHeightCm || 0) < a.fenceMinHeightCm) {
+        score -= 10;
+        reasons.push(`Needs ${a.fenceMinHeightCm}cm fence; profile has ${p.fenceHeightCm || 0}cm.`);
+      }
+    }
+  }
+
+  // Time alone tolerance
+  if (p.awayWeekdayHours > 0) {
+    if (p.awayWeekdayHours > a.timeAloneToleranceHrs + 2) {
+      score -= 10;
+      reasons.push(
+        `Owner away ~${p.awayWeekdayHours}h; pet tolerates ~${a.timeAloneToleranceHrs}h.`
+      );
+    } else {
+      score += 5;
+      reasons.push("Time-alone tolerance within range.");
+    }
+  }
+
+  // Other pets at home
+  if (p.otherPets === "dog" && !a.goodWithDogs) {
+    score -= 12;
+    reasons.push("Not good with dogs; home has a dog.");
+  }
+  if (p.otherPets === "cat" && !a.goodWithCats) {
+    score -= 12;
+    reasons.push("Not good with cats; home has a cat.");
+  }
+
+  // Budget (very rough, soft gate)
+  if (p.budgetAUD > 0) {
+    if (p.budgetAUD < a.costEstimateAUD) {
+      score -= 8;
+      reasons.push(
+        `Monthly budget ~A$${p.budgetAUD}; estimated costs ~A$${a.costEstimateAUD}.`
+      );
+    } else {
+      score += 3;
+      reasons.push("Budget likely sufficient.");
+    }
+  }
+
   return { score, reasons };
 }
 
+/** ----------------------------- UI ----------------------------- */
 export default function App() {
-  // Minimal profile
+  // Profile state
   const [profile, setProfile] = useState({
     prefers: "either", // dog | cat | either
+    dwelling: "apartment", // apartment | townhouse | house
+    hasYard: false,
+    fenceHeightCm: 0,
     activity: "moderate", // low | moderate | high
-    children: 0, // number of children at home
+    awayWeekdayHours: 8,
+    children: 0,
+    otherPets: "none", // none | dog | cat
+    budgetAUD: 200,
   });
 
-  // Pre-compute ranked matches
   const ranked = useMemo(() => {
     return animals
-      .map((a) => ({ animal: a, ...scoreMatch(a, profile) }))
+      .map((a) => ({ a, ...scoreMatch(a, profile) }))
       .sort((x, y) => y.score - x.score);
   }, [profile]);
 
@@ -133,7 +308,7 @@ export default function App() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            maxWidth: 1040,
+            maxWidth: 1200,
             margin: "0 auto",
           }}
         >
@@ -160,15 +335,15 @@ export default function App() {
       {/* Main */}
       <main
         style={{
-          maxWidth: 1040,
+          maxWidth: 1200,
           margin: "0 auto",
           padding: 24,
           display: "grid",
-          gridTemplateColumns: "300px 1fr",
+          gridTemplateColumns: "320px 1fr",
           gap: 16,
         }}
       >
-        {/* Profile panel */}
+        {/* Profile */}
         <section
           style={{
             background: "#fff",
@@ -179,86 +354,96 @@ export default function App() {
         >
           <h2 style={{ marginTop: 0, fontSize: 18 }}>Your profile</h2>
 
-          {/* Prefers */}
-          <div style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 13, color: "#475569" }}>Prefer</label>
-            <select
+          <Field label="Prefer">
+            <Select
               value={profile.prefers}
-              onChange={(e) => setProfile((p) => ({ ...p, prefers: e.target.value }))}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: "8px 10px",
-                border: "1px solid #cbd5e1",
-                borderRadius: 12,
-                background: "#fff",
-              }}
-            >
-              <option value="either">either</option>
-              <option value="dog">dog</option>
-              <option value="cat">cat</option>
-            </select>
-          </div>
-
-          {/* Activity */}
-          <div style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 13, color: "#475569" }}>Activity level</label>
-            <select
-              value={profile.activity}
-              onChange={(e) => setProfile((p) => ({ ...p, activity: e.target.value }))}
-              style={{
-                display: "block",
-                width: "100%",
-                padding: "8px 10px",
-                border: "1px solid #cbd5e1",
-                borderRadius: 12,
-                background: "#fff",
-              }}
-            >
-              <option value="low">low</option>
-              <option value="moderate">moderate</option>
-              <option value="high">high</option>
-            </select>
-          </div>
-
-          {/* Children */}
-          <div style={{ marginBottom: 12 }}>
-            <label style={{ fontSize: 13, color: "#475569" }}>Children at home</label>
-            <input
-              type="number"
-              min={0}
-              value={profile.children}
-              onChange={(e) =>
-                setProfile((p) => ({ ...p, children: Math.max(0, Number(e.target.value || 0)) }))
-              }
-              style={{
-                display: "block",
-                width: "100%",
-                padding: "8px 10px",
-                border: "1px solid #cbd5e1",
-                borderRadius: 12,
-                background: "#fff",
-              }}
+              onChange={(v) => setProfile((p) => ({ ...p, prefers: v }))}
+              options={["either", "dog", "cat"]}
             />
-          </div>
+          </Field>
 
-          <p style={{ fontSize: 12, color: "#64748b" }}>
-            Tip: try “prefer: dog”, “activity: low”, children 1 — watch scores change.
+          <Field label="Dwelling">
+            <Select
+              value={profile.dwelling}
+              onChange={(v) => setProfile((p) => ({ ...p, dwelling: v }))}
+              options={["apartment", "townhouse", "house"]}
+            />
+          </Field>
+
+          <Field label="Has yard">
+            <Switch
+              checked={profile.hasYard}
+              onChange={(v) => setProfile((p) => ({ ...p, hasYard: v }))}
+            />
+          </Field>
+
+          <Field label="Fence height (cm)">
+            <Number
+              value={profile.fenceHeightCm}
+              min={0}
+              disabled={!profile.hasYard}
+              onChange={(v) => setProfile((p) => ({ ...p, fenceHeightCm: v }))}
+            />
+          </Field>
+
+          <Field label="Activity level">
+            <Select
+              value={profile.activity}
+              onChange={(v) => setProfile((p) => ({ ...p, activity: v }))}
+              options={["low", "moderate", "high"]}
+            />
+          </Field>
+
+          <Field label="Away hrs (weekday)">
+            <Number
+              value={profile.awayWeekdayHours}
+              min={0}
+              onChange={(v) => setProfile((p) => ({ ...p, awayWeekdayHours: v }))}
+            />
+          </Field>
+
+          <Field label="Children at home">
+            <Number
+              value={profile.children}
+              min={0}
+              onChange={(v) => setProfile((p) => ({ ...p, children: v }))}
+            />
+          </Field>
+
+          <Field label="Other pets">
+            <Select
+              value={profile.otherPets}
+              onChange={(v) => setProfile((p) => ({ ...p, otherPets: v }))}
+              options={["none", "dog", "cat"]}
+            />
+          </Field>
+
+          <Field label="Budget (AUD/mo)">
+            <Number
+              value={profile.budgetAUD}
+              min={0}
+              onChange={(v) => setProfile((p) => ({ ...p, budgetAUD: v }))}
+            />
+          </Field>
+
+          <p style={{ fontSize: 12, color: "#64748b", marginTop: 12 }}>
+            Tip: try “prefer: dog”, “dwelling: apartment”, “has yard: off”, “activity:
+            low”, “away: 8h”, “children: 1” — watch scores change.
           </p>
         </section>
 
-        {/* Matches list */}
+        {/* Matches */}
         <section>
           <h2 style={{ fontSize: 18, margin: "0 0 12px" }}>Matches</h2>
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
               gap: 16,
             }}
           >
-            {ranked.map(({ animal, score, reasons }) => (
-              <MatchCard key={animal.id} a={animal} score={score} reasons={reasons} />
+            {ranked.map(({ a, score, reasons }) => (
+              <MatchCard key={a.id} a={a} score={score} reasons={reasons} />
             ))}
           </div>
         </section>
@@ -266,7 +451,7 @@ export default function App() {
 
       <footer
         style={{
-          maxWidth: 1040,
+          maxWidth: 1200,
           margin: "0 auto",
           padding: "12px 24px",
           color: "#64748b",
@@ -279,9 +464,82 @@ export default function App() {
   );
 }
 
+/** ------------------------ Small UI bits ----------------------- */
+function Field({ label, children }) {
+  return (
+    <div style={{ marginBottom: 12 }}>
+      <label style={{ fontSize: 13, color: "#475569", display: "block", marginBottom: 6 }}>
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
+function Select({ value, onChange, options }) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      style={{
+        display: "block",
+        width: "100%",
+        padding: "8px 10px",
+        border: "1px solid #cbd5e1",
+        borderRadius: 12,
+        background: "#fff",
+      }}
+    >
+      {options.map((o) => (
+        <option key={o} value={o}>
+          {o}
+        </option>
+      ))}
+    </select>
+  );
+}
+
+function Number({ value, onChange, min = 0, disabled = false }) {
+  return (
+    <input
+      type="number"
+      min={min}
+      value={value}
+      disabled={disabled}
+      onChange={(e) => onChange(Math.max(min, Number(e.target.value || 0)))}
+      style={{
+        display: "block",
+        width: "100%",
+        padding: "8px 10px",
+        border: "1px solid #cbd5e1",
+        borderRadius: 12,
+        background: disabled ? "#f1f5f9" : "#fff",
+      }}
+    />
+  );
+}
+
+function Switch({ checked, onChange }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      style={{
+        padding: "6px 10px",
+        borderRadius: 999,
+        border: "1px solid #cbd5e1",
+        background: checked ? "#dcfce7" : "#fff",
+        color: checked ? "#166534" : "#0f172a",
+      }}
+    >
+      {checked ? "Yes" : "No"}
+    </button>
+  );
+}
+
 function MatchCard({ a, score, reasons }) {
   const [open, setOpen] = useState(false);
-  const badge = scoreBadge(score);
+  const b = badgeFor(score);
 
   const pill = (text, bg = "#f1f5f9", color = "#0f172a") => (
     <span
@@ -305,31 +563,55 @@ function MatchCard({ a, score, reasons }) {
   )}`;
 
   return (
-    <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 16, overflow: "hidden" }}>
-      {/* Image */}
+    <div
+      style={{
+        background: "#fff",
+        border: "1px solid #e5e7eb",
+        borderRadius: 16,
+        overflow: "hidden",
+      }}
+    >
       {a.image && (
-        <img src={a.image} alt={a.name} style={{ width: "100%", height: 160, objectFit: "cover" }} />
+        <img
+          src={a.image}
+          alt={a.name}
+          style={{ width: "100%", height: 170, objectFit: "cover" }}
+        />
       )}
 
-      {/* Content */}
       <div style={{ padding: 12 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 6,
+          }}
+        >
           <div style={{ fontWeight: 600 }}>{a.name}</div>
           <span
             style={{
               fontSize: 12,
               padding: "2px 8px",
               borderRadius: 999,
-              background: badge.bg,
-              color: badge.color,
+              background: b.bg,
+              color: b.color,
               fontWeight: 600,
             }}
+            title={`Score ${score}`}
           >
-            {badge.label}
+            {b.label}
           </span>
         </div>
 
-        <div style={{ fontSize: 13, color: "#475569", marginBottom: 8, textTransform: "capitalize" }}>
+        <div
+          style={{
+            fontSize: 13,
+            color: "#475569",
+            marginBottom: 8,
+            textTransform: "capitalize",
+          }}
+        >
           {a.species} • {a.breed} • {a.size} • energy: {a.energy}
         </div>
 
@@ -337,12 +619,18 @@ function MatchCard({ a, score, reasons }) {
           {a.goodWithKids && pill("Kid friendly", "#dcfce7", "#166534")}
           {a.goodWithDogs && pill("Dog friendly", "#dcfce7", "#166534")}
           {a.goodWithCats && pill("Cat friendly", "#dcfce7", "#166534")}
+          {a.needsYard && pill("Needs yard")}
         </div>
 
         <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
           <button
             onClick={() => setOpen((o) => !o)}
-            style={{ border: "1px solid #cbd5e1", padding: "8px 12px", borderRadius: 12, background: "#fff" }}
+            style={{
+              border: "1px solid #cbd5e1",
+              padding: "8px 12px",
+              borderRadius: 12,
+              background: "#fff",
+            }}
           >
             {open ? "Hide reasons" : "View reasons"}
           </button>

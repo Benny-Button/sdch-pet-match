@@ -5,142 +5,150 @@ import React, { useMemo, useState } from "react";
  *  Keep attributes aligned to the profile + scoring rules below.
  *  ---------------------------------------------------------------- */
 const animals = [
-  {
-    id: "D-101",
-    name: "Milo",
-    species: "dog",
-    breed: "Kelpie mix",
-    size: "medium",
-    energy: "high",
-    needsYard: true,
-    fenceMinHeightCm: 150,
-    timeAloneToleranceHrs: 4,
-    goodWithKids: true,
-    goodWithDogs: true,
-    goodWithCats: false,
-    costEstimateAUD: 180,
-    image:
-      "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: "D-203",
-    name: "Bear",
-    species: "dog",
-    breed: "Greyhound",
-    size: "large",
-    energy: "low",
-    needsYard: false,
-    fenceMinHeightCm: 0,
-    timeAloneToleranceHrs: 6,
-    goodWithKids: true,
-    goodWithDogs: true,
-    goodWithCats: false,
-    costEstimateAUD: 160,
-    image:
-      "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: "D-244",
-    name: "Archie",
-    species: "dog",
-    breed: "Cavoodle",
-    size: "small",
-    energy: "moderate",
-    needsYard: false,
-    fenceMinHeightCm: 0,
-    timeAloneToleranceHrs: 5,
-    goodWithKids: true,
-    goodWithDogs: true,
-    goodWithCats: true,
-    costEstimateAUD: 200,
-    image:
-      "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: "D-318",
-    name: "Daisy",
-    species: "dog",
-    breed: "Labrador",
-    size: "large",
-    energy: "high",
-    needsYard: true,
-    fenceMinHeightCm: 150,
-    timeAloneToleranceHrs: 3,
-    goodWithKids: true,
-    goodWithDogs: true,
-    goodWithCats: false,
-    costEstimateAUD: 220,
-    image:
-      "https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: "D-351",
-    name: "Rusty",
-    species: "dog",
-    breed: "Cattle Dog",
-    size: "medium",
-    energy: "high",
-    needsYard: true,
-    fenceMinHeightCm: 180,
-    timeAloneToleranceHrs: 4,
-    goodWithKids: true,
-    goodWithDogs: true,
-    goodWithCats: false,
-    costEstimateAUD: 190,
-    image:
-      "https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: "C-317",
-    name: "Maisie",
-    species: "cat",
-    breed: "Domestic Shorthair",
-    size: "small",
-    energy: "moderate",
-    needsYard: false,
-    fenceMinHeightCm: 0,
-    timeAloneToleranceHrs: 8,
-    goodWithKids: true,
-    goodWithDogs: false,
-    goodWithCats: true,
-    costEstimateAUD: 120,
-    image:
-      "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: "C-222",
-    name: "Luna",
-    species: "cat",
-    breed: "Ragdoll",
-    size: "small",
-    energy: "low",
-    needsYard: false,
-    fenceMinHeightCm: 0,
-    timeAloneToleranceHrs: 6,
-    goodWithKids: true,
-    goodWithDogs: true,
-    goodWithCats: true,
-    costEstimateAUD: 140,
-    image:
-      "https://images.unsplash.com/photo-1543852786-1cf6624b9987?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: "C-289",
-    name: "Pepper",
-    species: "cat",
-    breed: "Bengal",
-    size: "small",
-    energy: "high",
-    needsYard: false,
-    fenceMinHeightCm: 0,
-    timeAloneToleranceHrs: 4,
-    goodWithKids: false,
-    goodWithDogs: false,
-    goodWithCats: true,
-    costEstimateAUD: 150,
-    image:
-      "https://images.unsplash.com/photo-1596854307943-279e29c90b68?q=80&w=1200&auto=format&fit=crop",
-  },
+ {
+  id: "D-101",
+  name: "Milo",
+  species: "dog",
+  breed: "Kelpie mix",
+  size: "medium",
+  energy: "high",
+  needsYard: true,
+  fenceMinHeightCm: 150,
+  timeAloneToleranceHrs: 4,
+  goodWithKids: true,
+  goodWithDogs: true,
+  goodWithCats: false,
+  costEstimateAUD: 180,
+  image:
+    "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1200&auto=format&fit=crop",
+  focusY: 55, // show a touch more bottom if the top gets tight
+},
+{
+  id: "D-203",
+  name: "Bear",
+  species: "dog",
+  breed: "Greyhound",
+  size: "large",
+  energy: "low",
+  needsYard: false,
+  fenceMinHeightCm: 0,
+  timeAloneToleranceHrs: 6,
+  goodWithKids: true,
+  goodWithDogs: true,
+  goodWithCats: false,
+  costEstimateAUD: 160,
+  image:
+    "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=1200&auto=format&fit=crop",
+  focusY: 35, // face high in frame → bias upward to avoid chopping ears
+},
+{
+  id: "D-244",
+  name: "Archie",
+  species: "dog",
+  breed: "Cavoodle",
+  size: "small",
+  energy: "moderate",
+  needsYard: false,
+  fenceMinHeightCm: 0,
+  timeAloneToleranceHrs: 5,
+  goodWithKids: true,
+  goodWithDogs: true,
+  goodWithCats: true,
+  costEstimateAUD: 200,
+  image:
+    "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=1200&auto=format&fit=crop",
+  focusY: 50, // centered is fine here
+},
+{
+  id: "D-318",
+  name: "Daisy",
+  species: "dog",
+  breed: "Labrador",
+  size: "large",
+  energy: "high",
+  needsYard: true,
+  fenceMinHeightCm: 150,
+  timeAloneToleranceHrs: 3,
+  goodWithKids: true,
+  goodWithDogs: true,
+  goodWithCats: false,
+  costEstimateAUD: 220,
+  image:
+    "https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?q=80&w=1200&auto=format&fit=crop",
+  focusY: 45,
+},
+{
+  id: "D-351",
+  name: "Rusty",
+  species: "dog",
+  breed: "Cattle Dog",
+  size: "medium",
+  energy: "high",
+  needsYard: true,
+  fenceMinHeightCm: 180,
+  timeAloneToleranceHrs: 4,
+  goodWithKids: true,
+  goodWithDogs: true,
+  goodWithCats: false,
+  costEstimateAUD: 190,
+  image:
+    "https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=1200&auto=format&fit=crop",
+  focusY: 40,
+},
+{
+  id: "C-317",
+  name: "Maisie",
+  species: "cat",
+  breed: "Domestic Shorthair",
+  size: "small",
+  energy: "moderate",
+  needsYard: false,
+  fenceMinHeightCm: 0,
+  timeAloneToleranceHrs: 8,
+  goodWithKids: true,
+  goodWithDogs: false,
+  goodWithCats: true,
+  costEstimateAUD: 120,
+  image:
+    "https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=1200&auto=format&fit=crop",
+  focusY: 50,
+},
+{
+  id: "C-222",
+  name: "Luna",
+  species: "cat",
+  breed: "Ragdoll",
+  size: "small",
+  energy: "low",
+  needsYard: false,
+  fenceMinHeightCm: 0,
+  timeAloneToleranceHrs: 6,
+  goodWithKids: true,
+  goodWithDogs: true,
+  goodWithCats: true,
+  costEstimateAUD: 140,
+  image:
+    "https://images.unsplash.com/photo-1543852786-1cf6624b9987?q=80&w=1200&auto=format&fit=crop",
+  focusY: 45,
+},
+{
+  id: "C-289",
+  name: "Pepper",
+  species: "cat",
+  breed: "Bengal",
+  size: "small",
+  energy: "high",
+  needsYard: false,
+  fenceMinHeightCm: 0,
+  timeAloneToleranceHrs: 4,
+  goodWithKids: false,
+  goodWithDogs: false,
+  goodWithCats: true,
+  costEstimateAUD: 150,
+  image:
+    "https://images.unsplash.com/photo-1596854307943-279e29c90b68?q=80&w=1200&auto=format&fit=crop",
+  focusY: 50,
+},
 ];
 
 /** ----------------------- Scoring helpers ----------------------- */
@@ -377,14 +385,14 @@ export default function App() {
             />
           </Field>
 
-          <Field label="Fence height (cm)">
-            <NumInput
-              value={profile.fenceHeightCm}
-              min={0}
-              disabled={!profile.hasYard}
-              onChange={(v) => setProfile((p) => ({ ...p, fenceHeightCm: v }))}
-            />
-          </Field>
+         <Field label="Fence height (cm)">
+  <NumInput
+    value={Number.isFinite(profile.fenceHeightCm) ? profile.fenceHeightCm : 0}
+    min={0}
+    disabled={!profile.hasYard}
+    onChange={(v) => setProfile((p) => ({ ...p, fenceHeightCm: v }))}
+  />
+</Field>
 
           <Field label="Activity level">
             <Select
@@ -579,23 +587,26 @@ function MatchCard({ a, score, reasons }) {
         overflow: "hidden",
       }}
     >
-     {a.image && (
+{a.image && (
   <img
     src={a.image}
     alt={a.name}
     style={{
       width: "100%",
-      aspectRatio: "16 / 9",   // keeps cards even without hard-cropping
+      aspectRatio: "4 / 3",                 // taller than 16:9 → less forehead cropping
       objectFit: "cover",
-      objectPosition: "center top", // bias toward faces
+      objectPosition: `50% ${typeof a.focusY === "number" ? `${a.focusY}%` : "50%"}`,
       display: "block",
       background: "#eef2f7",
     }}
+    loading="lazy"
+    decoding="async"
     onError={(e) => {
-      // graceful fallback if an image 404s
       e.currentTarget.onerror = null;
       e.currentTarget.src =
-        "https://images.unsplash.com/photo-1558944351-c6ae3f6b3515?q=80&w=1200&auto=format&fit=crop";
+        a.species === "cat"
+          ? "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=1200&auto=format&fit=crop"
+          : "https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=1200&auto=format&fit=crop";
     }}
   />
 )}

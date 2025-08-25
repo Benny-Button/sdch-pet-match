@@ -36,7 +36,7 @@ const animals = [
   goodWithDogs: true,
   goodWithCats: true,
   costEstimateAUD: 170,
-  image: "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=1200&auto=format&fit=crop",
+  image: "https://images.unsplash.com/photo-1525253086316-d0c936c814f8?q=80&w=1200&auto=format&fit=crop",
   focusY: 55,
 },
 {
@@ -70,7 +70,7 @@ const animals = [
   goodWithDogs: true,
   goodWithCats: true,
   costEstimateAUD: 185,
-  image: "https://images.unsplash.com/photo-1507149833265-60c372daea22?q=80&w=1200&auto=format&fit=crop",
+  image: "https://images.unsplash.com/photo-1537151625747-768eb6cf92b6?q=80&w=1200&auto=format&fit=crop",
   focusY: 50,
 },
 {

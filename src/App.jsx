@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 
 /** ----------------------------------------------------------------
  *  Sample animals (Dogs + Cats)
- *  Keep attributes aligned to the profile + scoring rules below.
+ *  Keep attributes aligned to the profile + scoring rules beLow.
  *  ---------------------------------------------------------------- */
 const animals = [
  {
@@ -11,7 +11,7 @@ const animals = [
   species: "Dog",
   breed: "Staffy mix",
   size: "medium",
-  energy: "moderate",
+  energy: "Moderate",
   needsYard: true,
   fenceMinHeightCm: 150,
   timeAloneToleranceHrs: 4,
@@ -28,7 +28,7 @@ const animals = [
   species: "Dog",
   breed: "Boxer x Staffy",
   size: "medium",
-  energy: "moderate",
+  energy: "Moderate",
   needsYard: false,
   fenceMinHeightCm: 0,
   timeAloneToleranceHrs: 5,
@@ -45,7 +45,7 @@ const animals = [
   species: "Dog",
   breed: "Labrador mix",
   size: "medium",
-  energy: "high",
+  energy: "High",
   needsYard: true,
   fenceMinHeightCm: 150,
   timeAloneToleranceHrs: 3,
@@ -62,7 +62,7 @@ const animals = [
   species: "Dog",
   breed: "American Staffy mix",
   size: "medium",
-  energy: "moderate",
+  energy: "Moderate",
   needsYard: true,
   fenceMinHeightCm: 150,
   timeAloneToleranceHrs: 4,
@@ -79,7 +79,7 @@ const animals = [
   species: "Dog",
   breed: "Mastiff mix",
   size: "large",
-  energy: "low",
+  energy: "Low",
   needsYard: false,
   fenceMinHeightCm: 0,
   timeAloneToleranceHrs: 6,
@@ -96,7 +96,7 @@ const animals = [
   species: "Dog",
   breed: "Staffy x",
   size: "medium",
-  energy: "moderate",
+  energy: "Moderate",
   needsYard: false,
   fenceMinHeightCm: 0,
   timeAloneToleranceHrs: 5,
@@ -113,7 +113,7 @@ const animals = [
   species: "Dog",
   breed: "Kelpie mix",
   size: "medium",
-  energy: "high",
+  energy: "High",
   needsYard: true,
   fenceMinHeightCm: 150,
   timeAloneToleranceHrs: 4,
@@ -131,7 +131,7 @@ const animals = [
   species: "Dog",
   breed: "Greyhound",
   size: "large",
-  energy: "low",
+  energy: "Low",
   needsYard: false,
   fenceMinHeightCm: 0,
   timeAloneToleranceHrs: 6,
@@ -141,7 +141,7 @@ const animals = [
   costEstimateAUD: 160,
   image:
     "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=1200&auto=format&fit=crop",
-  focusY: 35, // face high in frame → bias upward to avoid chopping ears
+  focusY: 35, // face High in frame → bias upward to avoid chopping ears
 },
 {
   id: "D-244",
@@ -149,7 +149,7 @@ const animals = [
   species: "Dog",
   breed: "Cavoodle",
   size: "small",
-  energy: "moderate",
+  energy: "Moderate",
   needsYard: false,
   fenceMinHeightCm: 0,
   timeAloneToleranceHrs: 5,
@@ -167,7 +167,7 @@ const animals = [
   species: "Dog",
   breed: "Labrador",
   size: "large",
-  energy: "high",
+  energy: "High",
   needsYard: true,
   fenceMinHeightCm: 150,
   timeAloneToleranceHrs: 3,
@@ -185,7 +185,7 @@ const animals = [
   species: "Dog",
   breed: "Cattle Dog",
   size: "medium",
-  energy: "high",
+  energy: "High",
   needsYard: true,
   fenceMinHeightCm: 180,
   timeAloneToleranceHrs: 4,
@@ -203,7 +203,7 @@ const animals = [
   species: "Cat",
   breed: "Domestic Shorthair",
   size: "small",
-  energy: "moderate",
+  energy: "Moderate",
   needsYard: false,
   fenceMinHeightCm: 0,
   timeAloneToleranceHrs: 8,
@@ -221,7 +221,7 @@ const animals = [
   species: "Cat",
   breed: "Ragdoll",
   size: "small",
-  energy: "low",
+  energy: "Low",
   needsYard: false,
   fenceMinHeightCm: 0,
   timeAloneToleranceHrs: 6,
@@ -239,7 +239,7 @@ const animals = [
   species: "Cat",
   breed: "Bengal",
   size: "small",
-  energy: "high",
+  energy: "High",
   needsYard: false,
   fenceMinHeightCm: 0,
   timeAloneToleranceHrs: 4,
@@ -254,7 +254,7 @@ const animals = [
 ];
 
 /** ----------------------- Scoring helpers ----------------------- */
-const map3 = { low: 1, moderate: 2, high: 3 };
+const map3 = { Low: 1, Moderate: 2, High: 3 };
 const sizeMap = { small: 1, medium: 2, large: 3 };
 
 function badgeFor(score) {
@@ -269,7 +269,7 @@ function scoreMatch(a, p) {
   const reasons = [];
 
   // Species preference
-  if (p.prefers !== "either" && a.species !== p.prefers) {
+  if (p.prefers !== "Either" && a.species !== p.prefers) {
     score -= 20;
     reasons.push(`Prefers ${p.prefers}, but this is a ${a.species}.`);
   } else {
@@ -307,23 +307,23 @@ function scoreMatch(a, p) {
     if (a.species === "Cat") {
       score += 6;
       reasons.push("Apartment-suitable: Cat.");
-    } else if (sizeMap[a.size] >= 3 || a.energy === "high") {
+    } else if (sizeMap[a.size] >= 3 || a.energy === "High") {
       score -= 10;
-      reasons.push("Big/high-energy Dog in apartment may be unsuitable.");
+      reasons.push("Big/High-energy Dog in Apartment may be unsuitable.");
     } else {
       score += 4;
-      reasons.push("Dog is small/medium or moderate energy — OK for apartment.");
+      reasons.push("Dog is small/medium or Moderate energy — OK for Apartment.");
     }
   } else {
     score += 2;
-    reasons.push("House/townhouse gives more space.");
+    reasons.push("House/Townhouse gives more space.");
   }
 
   // Yard needs
   if (a.needsYard) {
     if (!p.hasYard) {
       score -= 25;
-      reasons.push("Pet requires a yard; profile has none.");
+      reasons.push("Pet requires a yard; profile has None.");
     } else {
       score += 6;
       reasons.push("Yard available.");
@@ -377,14 +377,14 @@ function scoreMatch(a, p) {
 export default function App() {
   // Profile state
   const [profile, setProfile] = useState({
-    prefers: "either", // Dog | Cat | either
-    dwelling: "apartment", // apartment | townhouse | house
+    prefers: "Either", // Dog | Cat | Either
+    dwelling: "Apartment", // Apartment | Townhouse | House
     hasYard: false,
     fenceHeightCm: 0,
-    activity: "moderate", // low | moderate | high
+    activity: "Moderate", // Low | Moderate | High
     awayWeekdayHours: 8,
     children: 0,
-    otherPets: "none", // none | Dog | Cat
+    otherPets: "None", // None | Dog | Cat
     budgetAUD: 200,
   });
 
@@ -430,7 +430,7 @@ export default function App() {
             target="_blank"
             rel="noreferrer"
             style={{
-              textDecoration: "none",
+              textDecoration: "None",
               color: "#0f172a",
               border: "1px solid #cbd5e1",
               padding: "8px 12px",
@@ -468,7 +468,7 @@ export default function App() {
             <Select
               value={profile.prefers}
               onChange={(v) => setProfile((p) => ({ ...p, prefers: v }))}
-              options={["either", "Dog", "Cat"]}
+              options={["Either", "Dog", "Cat"]}
             />
           </Field>
 
@@ -476,7 +476,7 @@ export default function App() {
             <Select
               value={profile.dwelling}
               onChange={(v) => setProfile((p) => ({ ...p, dwelling: v }))}
-              options={["apartment", "townhouse", "house"]}
+              options={["Apartment", "Townhouse", "House"]}
             />
           </Field>
 
@@ -500,7 +500,7 @@ export default function App() {
             <Select
               value={profile.activity}
               onChange={(v) => setProfile((p) => ({ ...p, activity: v }))}
-              options={["low", "moderate", "high"]}
+              options={["Low", "Moderate", "High"]}
             />
           </Field>
 
@@ -524,7 +524,7 @@ export default function App() {
             <Select
               value={profile.otherPets}
               onChange={(v) => setProfile((p) => ({ ...p, otherPets: v }))}
-              options={["none", "Dog", "Cat"]}
+              options={["None", "Dog", "Cat"]}
             />
           </Field>
 
@@ -537,8 +537,8 @@ export default function App() {
           </Field>
 
           <p style={{ fontSize: 12, color: "#64748b", marginTop: 12 }}>
-            Tip: try “prefer: Dog”, “dwelling: apartment”, “has yard: off”, “activity:
-            low”, “away: 8h”, “children: 1” — watch scores change.
+            Tip: try “prefer: Dog”, “dwelling: Apartment”, “has yard: off”, “activity:
+            Low”, “away: 8h”, “children: 1” — watch scores change.
           </p>
         </section>
 
@@ -568,7 +568,7 @@ export default function App() {
           fontSize: 12,
         }}
       >
-        Prototype only — always follow SDCH’s adoption process.
+        Prototype only — always folLow SDCH’s adoption process.
       </footer>
     </div>
   );
@@ -621,7 +621,7 @@ function NumInput({ value, onChange, min = 0, disabled = false }) {
       disabled={disabled}
       onChange={(e) => {
         const raw = e.target.value;
-        // allow quick edits; treat blank as 0
+        // alLow quick edits; treat blank as 0
         const next = raw === "" ? 0 : Math.max(min, Number.parseFloat(raw));
         onChange(next);
       }}
@@ -686,7 +686,7 @@ function MatchCard({ a, score, reasons }) {
         background: "#fff",
         border: "1px solid #e5e7eb",
         borderRadius: 16,
-        overflow: "hidden",
+        overfLow: "hidden",
       }}
     >
 {a.image && (
@@ -771,7 +771,7 @@ function MatchCard({ a, score, reasons }) {
           <a
             href={mailto}
             style={{
-              textDecoration: "none",
+              textDecoration: "None",
               border: "1px solid #cbd5e1",
               padding: "8px 12px",
               borderRadius: 12,

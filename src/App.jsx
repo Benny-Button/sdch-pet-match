@@ -378,7 +378,7 @@ export default function App() {
           </Field>
 
           <Field label="Fence height (cm)">
-            <Number
+            <NumInput
               value={profile.fenceHeightCm}
               min={0}
               disabled={!profile.hasYard}
@@ -395,7 +395,7 @@ export default function App() {
           </Field>
 
           <Field label="Away hrs (weekday)">
-            <Number
+            <NumInput
               value={profile.awayWeekdayHours}
               min={0}
               onChange={(v) => setProfile((p) => ({ ...p, awayWeekdayHours: v }))}
@@ -403,7 +403,7 @@ export default function App() {
           </Field>
 
           <Field label="Children at home">
-            <Number
+            <NumInput
               value={profile.children}
               min={0}
               onChange={(v) => setProfile((p) => ({ ...p, children: v }))}
@@ -419,7 +419,7 @@ export default function App() {
           </Field>
 
           <Field label="Budget (AUD/mo)">
-            <Number
+            <NumInput
               value={profile.budgetAUD}
               min={0}
               onChange={(v) => setProfile((p) => ({ ...p, budgetAUD: v }))}
@@ -499,14 +499,22 @@ function Select({ value, onChange, options }) {
   );
 }
 
-function Number({ value, onChange, min = 0, disabled = false }) {
+function NumInput({ value, onChange, min = 0, disabled = false }) {
   return (
     <input
       type="number"
+      inputMode="numeric"
+      pattern="[0-9]*"
+      step="1"
       min={min}
       value={value}
       disabled={disabled}
-      onChange={(e) => onChange(Math.max(min, Number(e.target.value || 0)))}
+      onChange={(e) => {
+        const raw = e.target.value;
+        // allow quick edits; treat blank as 0
+        const next = raw === "" ? 0 : Math.max(min, Number.parseFloat(raw));
+        onChange(next);
+      }}
       style={{
         display: "block",
         width: "100%",
@@ -571,13 +579,26 @@ function MatchCard({ a, score, reasons }) {
         overflow: "hidden",
       }}
     >
-      {a.image && (
-        <img
-          src={a.image}
-          alt={a.name}
-          style={{ width: "100%", height: 170, objectFit: "cover" }}
-        />
-      )}
+     {a.image && (
+  <img
+    src={a.image}
+    alt={a.name}
+    style={{
+      width: "100%",
+      aspectRatio: "16 / 9",   // keeps cards even without hard-cropping
+      objectFit: "cover",
+      objectPosition: "center top", // bias toward faces
+      display: "block",
+      background: "#eef2f7",
+    }}
+    onError={(e) => {
+      // graceful fallback if an image 404s
+      e.currentTarget.onerror = null;
+      e.currentTarget.src =
+        "https://images.unsplash.com/photo-1558944351-c6ae3f6b3515?q=80&w=1200&auto=format&fit=crop";
+    }}
+  />
+)}
 
       <div style={{ padding: 12 }}>
         <div

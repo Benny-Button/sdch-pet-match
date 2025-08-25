@@ -176,7 +176,7 @@ const animals = [
   goodWithCats: false,
   costEstimateAUD: 220,
   image:
-    "https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?q=80&w=1200&auto=format&fit=crop",
   focusY: 45,
 },
 {

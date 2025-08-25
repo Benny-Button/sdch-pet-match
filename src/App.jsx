@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from "react";
 
 /** ----------------------------------------------------------------
- *  Sample animals (dogs + cats)
+ *  Sample animals (Dogs + Cats)
  *  Keep attributes aligned to the profile + scoring rules below.
  *  ---------------------------------------------------------------- */
 const animals = [
  {
   id: "D-401",
   name: "Nala",
-  species: "dog",
+  species: "Dog",
   breed: "Staffy mix",
   size: "medium",
   energy: "moderate",
@@ -25,7 +25,7 @@ const animals = [
 {
   id: "D-402",
   name: "Koko",
-  species: "dog",
+  species: "Dog",
   breed: "Boxer x Staffy",
   size: "medium",
   energy: "moderate",
@@ -42,7 +42,7 @@ const animals = [
 {
   id: "D-403",
   name: "Biscuits",
-  species: "dog",
+  species: "Dog",
   breed: "Labrador mix",
   size: "medium",
   energy: "high",
@@ -59,7 +59,7 @@ const animals = [
 {
   id: "D-404",
   name: "Lucky",
-  species: "dog",
+  species: "Dog",
   breed: "American Staffy mix",
   size: "medium",
   energy: "moderate",
@@ -76,7 +76,7 @@ const animals = [
 {
   id: "D-405",
   name: "Cosmo",
-  species: "dog",
+  species: "Dog",
   breed: "Mastiff mix",
   size: "large",
   energy: "low",
@@ -93,7 +93,7 @@ const animals = [
 {
   id: "D-406",
   name: "Melody",
-  species: "dog",
+  species: "Dog",
   breed: "Staffy x",
   size: "medium",
   energy: "moderate",
@@ -110,7 +110,7 @@ const animals = [
 {
   id: "D-101",
   name: "Milo",
-  species: "dog",
+  species: "Dog",
   breed: "Kelpie mix",
   size: "medium",
   energy: "high",
@@ -128,7 +128,7 @@ const animals = [
 {
   id: "D-203",
   name: "Bear",
-  species: "dog",
+  species: "Dog",
   breed: "Greyhound",
   size: "large",
   energy: "low",
@@ -146,7 +146,7 @@ const animals = [
 {
   id: "D-244",
   name: "Archie",
-  species: "dog",
+  species: "Dog",
   breed: "Cavoodle",
   size: "small",
   energy: "moderate",
@@ -164,7 +164,7 @@ const animals = [
 {
   id: "D-318",
   name: "Daisy",
-  species: "dog",
+  species: "Dog",
   breed: "Labrador",
   size: "large",
   energy: "high",
@@ -182,7 +182,7 @@ const animals = [
 {
   id: "D-351",
   name: "Rusty",
-  species: "dog",
+  species: "Dog",
   breed: "Cattle Dog",
   size: "medium",
   energy: "high",
@@ -200,7 +200,7 @@ const animals = [
 {
   id: "C-317",
   name: "Maisie",
-  species: "cat",
+  species: "Cat",
   breed: "Domestic Shorthair",
   size: "small",
   energy: "moderate",
@@ -218,7 +218,7 @@ const animals = [
 {
   id: "C-222",
   name: "Luna",
-  species: "cat",
+  species: "Cat",
   breed: "Ragdoll",
   size: "small",
   energy: "low",
@@ -236,7 +236,7 @@ const animals = [
 {
   id: "C-289",
   name: "Pepper",
-  species: "cat",
+  species: "Cat",
   breed: "Bengal",
   size: "small",
   energy: "high",
@@ -303,13 +303,13 @@ function scoreMatch(a, p) {
   }
 
   // Dwelling suitability
-  if (p.dwelling === "apartment") {
-    if (a.species === "cat") {
+  if (p.dwelling === "Apartment") {
+    if (a.species === "Cat") {
       score += 6;
-      reasons.push("Apartment-suitable: cat.");
+      reasons.push("Apartment-suitable: Cat.");
     } else if (sizeMap[a.size] >= 3 || a.energy === "high") {
       score -= 10;
-      reasons.push("Big/high-energy dog in apartment may be unsuitable.");
+      reasons.push("Big/high-energy Dog in apartment may be unsuitable.");
     } else {
       score += 4;
       reasons.push("Dog is small/medium or moderate energy — OK for apartment.");
@@ -348,13 +348,13 @@ function scoreMatch(a, p) {
   }
 
   // Other pets at home
-  if (p.otherPets === "dog" && !a.goodWithDogs) {
+  if (p.otherPets === "Dog" && !a.goodWithDogs) {
     score -= 12;
-    reasons.push("Not good with dogs; home has a dog.");
+    reasons.push("Not good with Dogs; home has a Dog.");
   }
-  if (p.otherPets === "cat" && !a.goodWithCats) {
+  if (p.otherPets === "Cat" && !a.goodWithCats) {
     score -= 12;
-    reasons.push("Not good with cats; home has a cat.");
+    reasons.push("Not good with Cats; home has a Cat.");
   }
 
   // Budget (very rough, soft gate)
@@ -377,14 +377,14 @@ function scoreMatch(a, p) {
 export default function App() {
   // Profile state
   const [profile, setProfile] = useState({
-    prefers: "either", // dog | cat | either
+    prefers: "either", // Dog | Cat | either
     dwelling: "apartment", // apartment | townhouse | house
     hasYard: false,
     fenceHeightCm: 0,
     activity: "moderate", // low | moderate | high
     awayWeekdayHours: 8,
     children: 0,
-    otherPets: "none", // none | dog | cat
+    otherPets: "none", // none | Dog | Cat
     budgetAUD: 200,
   });
 
@@ -426,7 +426,7 @@ export default function App() {
             SDCH Pet Match (Prototype)
           </h1>
           <a
-            href="https://sydneydogsandcatshome.org/adopt/"
+            href="https://sydneyDogsandCatshome.org/adopt/"
             target="_blank"
             rel="noreferrer"
             style={{
@@ -468,7 +468,7 @@ export default function App() {
             <Select
               value={profile.prefers}
               onChange={(v) => setProfile((p) => ({ ...p, prefers: v }))}
-              options={["either", "dog", "cat"]}
+              options={["either", "Dog", "Cat"]}
             />
           </Field>
 
@@ -524,7 +524,7 @@ export default function App() {
             <Select
               value={profile.otherPets}
               onChange={(v) => setProfile((p) => ({ ...p, otherPets: v }))}
-              options={["none", "dog", "cat"]}
+              options={["none", "Dog", "Cat"]}
             />
           </Field>
 
@@ -537,7 +537,7 @@ export default function App() {
           </Field>
 
           <p style={{ fontSize: 12, color: "#64748b", marginTop: 12 }}>
-            Tip: try “prefer: dog”, “dwelling: apartment”, “has yard: off”, “activity:
+            Tip: try “prefer: Dog”, “dwelling: apartment”, “has yard: off”, “activity:
             low”, “away: 8h”, “children: 1” — watch scores change.
           </p>
         </section>
@@ -674,7 +674,7 @@ function MatchCard({ a, score, reasons }) {
     </span>
   );
 
-  const mailto = `mailto:adoptions@sydneydogsandcatshome.org?subject=${encodeURIComponent(
+  const mailto = `mailto:adoptions@sydneyDogsandCatshome.org?subject=${encodeURIComponent(
     `Adoption interest: ${a.name} (${a.id})`
   )}&body=${encodeURIComponent(
     `Hi SDCH team,\n\nI'm interested in ${a.name} (${a.id}).\n\nThanks!`
@@ -706,7 +706,7 @@ function MatchCard({ a, score, reasons }) {
     onError={(e) => {
       e.currentTarget.onerror = null;
       e.currentTarget.src =
-        a.species === "cat"
+        a.species === "Cat"
           ? "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=1200&auto=format&fit=crop"
           : "https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=1200&auto=format&fit=crop";
     }}
